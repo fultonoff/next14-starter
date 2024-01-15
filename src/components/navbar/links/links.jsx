@@ -46,7 +46,7 @@ const Links = () => {
       </div>
 
       
-      <Image src='/menu.png' width={30} height={30} className={styles.menuButton}  onClick={()=> setOpen(!open)}/>
+      <Image src='/menu.png' width={30} height={30} className={styles.menuButton}  onClick={()=> setOpen(!open)} alt=""/>
       {open && <div className={styles.mobileLinks}>
           {links.map((link)=>{
             return <NavLink key={link.title} item={link}/>

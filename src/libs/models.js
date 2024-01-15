@@ -1,39 +1,59 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
-  username: { type: String, required: true, unique: true, min:3, max:20 },
-  email:{
-    type :String ,required:true,unique:true,lowercase:true, max:50
+const userSchema = new mongoose.Schema(
+  {
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+      min: 3,
+      max: 20,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      max: 50,
+    },
+    password: {
+      type: String,
+    },
+    img: {
+      type: String,
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
   },
-  password: {type: String, required: true, min:6},
-  image:{
-    type: String,
+  { timestamps: true }
+);
 
+const postSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    desc: {
+      type: String,
+      required: true,
+    },
+    img: {
+      type: String,
+    },
+    userId: {
+      type: String,
+      required: true,
+    },
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+    },
   },
-  isAdmin:{
-    default: false,
-    type: Boolean
-  }
-}, {timestamps: true});
+  { timestamps: true }
+);
 
-
-
-const postSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  description:{
-    type :String ,required:true,
-  },
-  image:{
-    type: String,
-
-  },
-  userId:{
-    required: true,
-    type: String
-  },
-  slug:{
-    required: true,
-    type: String,
-    unique:true
-  }
-}, {timestamps: true});
+export const User = mongoose.models?.User || mongoose.model("User", userSchema);
+export const Post = mongoose.models?.Post || mongoose.model("Post", postSchema);

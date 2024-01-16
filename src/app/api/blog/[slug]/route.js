@@ -19,8 +19,8 @@ export const DELETE = async (request, {params})=>{
     const {slug} = params
     try {
         connectToDb()
-        const post = await Post.deleteOne({slug})
-        return NextResponse.json(post)
+        await Post.deleteOne({slug})
+        return NextResponse.json('Post deleted')
     } catch (error) {
         console.log('something went wrong');
         throw new Error(error)

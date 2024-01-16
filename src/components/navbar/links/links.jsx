@@ -2,7 +2,8 @@
 import { useState } from "react";
 import styles from "./links.module.css";
 import NavLink from "./navLink/navLink";
-import Image from 'next/image'
+import Image from "next/image";
+import { handleLogOut } from "@/libs/action";
 
 const links = [
   {
@@ -23,11 +24,12 @@ const links = [
     path: "/blog",
   },
 ];
-const Links = () => {
+const Links = ({ session }) => {
   const [open, setOpen] = useState(false);
 
+  console.log(session);
 
-  const session = true;
+  // const session = true;
   const isAdmin = true;
   return (
     <div className={styles.container}>
@@ -35,24 +37,35 @@ const Links = () => {
         {links.map((link) => {
           return <NavLink key={link.title} item={link} />;
         })}
-        {session ? (
+        {session?.user ? (
           <>
-            {isAdmin && <NavLink item={{ title: "Admin", path: "/admin" }} />}
-            <button className={styles.logout}>Log out</button>
+            {session.user?.isAdmin && (
+              <NavLink item={{ title: "Admin", path: "/admin" }} />
+            )}
+            <form action={handleLogOut}>
+              <button className={styles.logout}>Log out</button>
+            </form>
           </>
         ) : (
           <NavLink item={{ title: "Login", path: "/login" }} />
         )}
       </div>
 
-      
-      <Image src='/menu.png' width={30} height={30} className={styles.menuButton}  onClick={()=> setOpen(!open)} alt=""/>
-      {open && <div className={styles.mobileLinks}>
-          {links.map((link)=>{
-            return <NavLink key={link.title} item={link}/>
+      <Image
+        src="/menu.png"
+        width={30}
+        height={30}
+        className={styles.menuButton}
+        onClick={() => setOpen(!open)}
+        alt=""
+      />
+      {open && (
+        <div className={styles.mobileLinks}>
+          {links.map((link) => {
+            return <NavLink key={link.title} item={link} />;
           })}
-      </div>
-      }
+        </div>
+      )}
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { signIn, signOut } from "./auth";
 import { Post, User } from "./models";
 import { connectToDb } from "./utils";
 import { revalidatePath } from "next/cache";
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 export const addpost = async (formData) => {
   const { title, desc, slug, userId } = Object.fromEntries(formData);
@@ -53,7 +53,7 @@ export const handleLogOut = async () => {
   await signOut();
 };
 
-export const register = async (formData) => {
+export const register = async (previousState, formData) => {
   const { username, email, password,img, passwordRepeat } =
     Object.fromEntries(formData);
 
@@ -80,8 +80,28 @@ export const register = async (formData) => {
     });
 
     await newUser.save();
-    console.log('saved to db');
-  } catch (error) {
+
+return {success: true}
+} catch (error) {
     return { error: "Something went wrong" };
+  }
+};
+
+
+export const login = async (prevState, formData) => {
+  const { username, password} = Object.fromEntries(formData);
+
+  
+
+  try {
+    
+    await signIn('credentials', {username, password});
+    
+  } catch (error) {
+
+    if(error.message.includes('CredentialsSignin')){
+        return {error: 'wrong username or password'}
+    }
+    throw error;
   }
 };
